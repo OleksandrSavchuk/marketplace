@@ -1,1 +1,18 @@
-spring.application.name=marketplace
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5437/marketplace
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+
+security:
+  jwt:
+    secret: ampmZG5namZkYmppbmdudWkzNHVpbmYgcmpISkJJTklVSkJIRmJkc25pamRic2hqZHNuVXU4NzQzZzhoNDNoZmh1
+    access: 3600000
+    refresh: 2592000000
