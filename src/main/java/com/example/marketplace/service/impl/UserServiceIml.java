@@ -5,16 +5,24 @@ import com.example.marketplace.entity.enums.Role;
 import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceIml implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
 
     @Override
     public User getById(Long id) {
@@ -27,14 +35,51 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public User create(User user) {
+    public User createUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalStateException("Username already exists.");
+        }
+        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
+            throw new IllegalStateException("Passwords do not match.");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.ROLE_USER);
         user.setCreatedAt(LocalDateTime.now());
-        user.setRole(Role.USER);
+        return userRepository.save(user);
+    }
+
+
+    @Override
+    public User createSeller(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalStateException("Username already exists.");
+        }
+        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
+            throw new IllegalStateException("Passwords do not match.");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.ROLE_SELLER);
+        user.setCreatedAt(LocalDateTime.now());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User createAdmin(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalStateException("Username already exists.");
+        }
+        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
+            throw new IllegalStateException("Passwords do not match.");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.ROLE_ADMIN);
+        user.setCreatedAt(LocalDateTime.now());
         return userRepository.save(user);
     }
 
     @Override
     public User update(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

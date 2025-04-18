@@ -5,10 +5,12 @@ import com.example.marketplace.entity.Category;
 import com.example.marketplace.mapper.CategoryMapper;
 import com.example.marketplace.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
@@ -30,9 +32,8 @@ public class CategoryController {
         return categoryMapper.toDto(category);
     }
 
-    @PutMapping("/{id}")
-    public CategoryDto update(@PathVariable Long id,
-                              @RequestBody CategoryDto categoryDto) {
+    @PutMapping
+    public CategoryDto update(@RequestBody CategoryDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
         Category updatedCategory = categoryService.update(category);
         return categoryMapper.toDto(updatedCategory);
@@ -43,6 +44,11 @@ public class CategoryController {
         Category category = categoryMapper.toEntity(categoryDto);
         Category createdCategory = categoryService.create(category);
         return categoryMapper.toDto(createdCategory);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        categoryService.delete(id);
     }
 
 }

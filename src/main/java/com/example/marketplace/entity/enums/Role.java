@@ -1,5 +1,5 @@
 package com.example.marketplace.entity.enums;
 
 public enum Role {
-    USER, SELLER, ADMIN
+    ROLE_USER, ROLE_SELLER, ROLE_ADMIN
 }

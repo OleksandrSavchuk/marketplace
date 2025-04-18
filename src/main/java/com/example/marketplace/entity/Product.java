@@ -19,13 +19,14 @@ public class Product {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
-    private Double price;
+    private double price;
 
     @Column(name = "inventory_count", nullable = false)
-    private Integer inventoryCount;
+    private int inventoryCount;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
