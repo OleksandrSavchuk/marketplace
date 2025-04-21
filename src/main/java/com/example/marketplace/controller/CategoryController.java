@@ -4,8 +4,11 @@ import com.example.marketplace.dto.CategoryDto;
 import com.example.marketplace.entity.Category;
 import com.example.marketplace.mapper.CategoryMapper;
 import com.example.marketplace.service.CategoryService;
+import com.example.marketplace.validation.OnCreate;
+import com.example.marketplace.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
+@Validated
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -33,14 +37,14 @@ public class CategoryController {
     }
 
     @PutMapping
-    public CategoryDto update(@RequestBody CategoryDto categoryDto) {
+    public CategoryDto update(@Validated(OnUpdate.class) @RequestBody CategoryDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
         Category updatedCategory = categoryService.update(category);
         return categoryMapper.toDto(updatedCategory);
     }
 
     @PostMapping
-    public CategoryDto create(@RequestBody CategoryDto categoryDto) {
+    public CategoryDto create(@Validated(OnCreate.class) @RequestBody CategoryDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
         Category createdCategory = categoryService.create(category);
         return categoryMapper.toDto(createdCategory);

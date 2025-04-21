@@ -4,7 +4,10 @@ import com.example.marketplace.dto.CartDto;
 import com.example.marketplace.entity.Cart;
 import com.example.marketplace.mapper.CartMapper;
 import com.example.marketplace.service.CartService;
+import com.example.marketplace.validation.OnCreate;
+import com.example.marketplace.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/carts")
 @RequiredArgsConstructor
+@Validated
 public class CartController {
 
     private final CartService cartService;
@@ -31,14 +35,14 @@ public class CartController {
     }
 
     @PostMapping
-    public CartDto create(@RequestBody CartDto cartDto) {
+    public CartDto create(@Validated(OnCreate.class) @RequestBody CartDto cartDto) {
         Cart cart = cartMapper.toEntity(cartDto);
         Cart createdCart = cartService.create(cart);
         return cartMapper.toDto(createdCart);
     }
 
     @PutMapping
-    public CartDto update(@RequestBody CartDto cartDto) {
+    public CartDto update(@Validated(OnUpdate.class) @RequestBody CartDto cartDto) {
         Cart cart = cartMapper.toEntity(cartDto);
         Cart updatedCart = cartService.update(cart);
         return cartMapper.toDto(updatedCart);
