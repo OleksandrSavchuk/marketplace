@@ -14,18 +14,14 @@ public class CartItemDto {
 
     @NotNull(message = "Cart must be not null.",
             groups = {OnCreate.class, OnUpdate.class})
-    private CartDto cart;
+    private Long cartId;
 
     @NotNull(message = "Product must be not null.",
             groups = {OnCreate.class, OnUpdate.class})
-    private ProductDto product;
+    private Long productId;
 
     @NotNull(message = "Quantity must be not null.",
             groups = {OnCreate.class, OnUpdate.class})
     private int quantity;
-
-    @NotNull(message = "Price must be not null.",
-            groups = {OnCreate.class, OnUpdate.class})
-    private double price;
 
 }

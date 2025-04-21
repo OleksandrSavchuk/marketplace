@@ -1,8 +1,8 @@
 package com.example.marketplace.controller;
 
-import com.example.marketplace.dto.CartDto;
-import com.example.marketplace.entity.Cart;
-import com.example.marketplace.mapper.CartMapper;
+import com.example.marketplace.dto.CartItemDto;
+import com.example.marketplace.entity.CartItem;
+import com.example.marketplace.mapper.CartItemMapper;
 import com.example.marketplace.service.CartService;
 import com.example.marketplace.validation.OnCreate;
 import com.example.marketplace.validation.OnUpdate;
@@ -20,37 +20,34 @@ public class CartController {
 
     private final CartService cartService;
 
-    private final CartMapper cartMapper;
-
-    @GetMapping
-    public List<CartDto> getAll() {
-        List<Cart> carts = cartService.getAll();
-        return cartMapper.toDto(carts);
-    }
+    private final CartItemMapper cartItemMapper;
 
     @GetMapping("/{id}")
-    public CartDto getById(@PathVariable Long id) {
-        Cart cart = cartService.getById(id);
-        return cartMapper.toDto(cart);
+    public List<CartItemDto> getCartItemsByCartId(@PathVariable Long id) {
+        List<CartItem> items = cartService.getCartItemsByCartId(id);
+        return cartItemMapper.toDto(items);
     }
 
-    @PostMapping
-    public CartDto create(@Validated(OnCreate.class) @RequestBody CartDto cartDto) {
-        Cart cart = cartMapper.toEntity(cartDto);
-        Cart createdCart = cartService.create(cart);
-        return cartMapper.toDto(createdCart);
+    @PostMapping("/add")
+    public CartItemDto addProductToCart(@Validated(OnCreate.class) @RequestBody CartItemDto cartItemDto) {
+        CartItem cartItem = cartService.addProductToCart(
+                cartItemDto.getCartId(),
+                cartItemDto.getProductId(),
+                cartItemDto.getQuantity()
+        );
+        return cartItemMapper.toDto(cartItem);
     }
 
-    @PutMapping
-    public CartDto update(@Validated(OnUpdate.class) @RequestBody CartDto cartDto) {
-        Cart cart = cartMapper.toEntity(cartDto);
-        Cart updatedCart = cartService.update(cart);
-        return cartMapper.toDto(updatedCart);
+    @PutMapping("/update")
+    public CartItemDto updateCartItem(@Validated(OnUpdate.class) @RequestBody CartItemDto cartItemDto) {
+        CartItem cartItem = cartItemMapper.toEntity(cartItemDto);
+        CartItem updatedItem = cartService.updateCartItem(cartItem);
+        return cartItemMapper.toDto(updatedItem);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        cartService.delete(id);
+    @DeleteMapping("/item/{id}")
+    public void deleteCartItem(@PathVariable Long id) {
+        cartService.deleteCartItem(id);
     }
 
 }

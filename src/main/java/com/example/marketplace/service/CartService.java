@@ -1,19 +1,18 @@
 package com.example.marketplace.service;
 
 import com.example.marketplace.entity.Cart;
+import com.example.marketplace.entity.CartItem;
 
 import java.util.List;
 
 public interface CartService {
 
-    List<Cart> getAll();
+    List<CartItem> getCartItemsByCartId(Long cartId);
 
-    Cart getById(Long id);
+    CartItem addProductToCart(Long cartId, Long productId, int quantity);
 
-    Cart create(Cart cart);
+    CartItem updateCartItem(CartItem cartItem);
 
-    Cart update(Cart cart);
-
-    void delete(Long id);
+    void deleteCartItem(Long id);
 
 }

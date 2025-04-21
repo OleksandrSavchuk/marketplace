@@ -1,7 +1,9 @@
 package com.example.marketplace.service.impl;
 
+import com.example.marketplace.entity.Cart;
 import com.example.marketplace.entity.User;
 import com.example.marketplace.entity.enums.Role;
+import com.example.marketplace.repository.CartRepository;
 import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,10 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
+    private final CartRepository cartRepository;
 
     @Override
     public List<User> getAll() {
@@ -47,6 +51,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER);
         user.setCreatedAt(LocalDateTime.now());
+
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cartRepository.save(cart);
+
         return userRepository.save(user);
     }
 
@@ -84,6 +93,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
+
+
 
     @Override
     public void delete(Long id) {
