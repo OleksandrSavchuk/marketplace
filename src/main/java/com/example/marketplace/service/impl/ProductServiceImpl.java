@@ -22,26 +22,31 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(Long id) {
+
         return productRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Product> getAllProductsBySellerId(Long sellerId) {
-        return productRepository.findAll();
+
+        return productRepository.findBySellerId(sellerId);
     }
 
     @Override
     public Product create(Product product) {
+
         return productRepository.save(product);
     }
 
     @Override
     public Product update(Product product) {
+
         return productRepository.save(product);
     }
 
     @Override
     public void delete(Long id) {
+
         productRepository.deleteById(id);
     }
 

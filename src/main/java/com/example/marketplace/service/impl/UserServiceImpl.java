@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceIml implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -26,11 +26,13 @@ public class UserServiceIml implements UserService {
 
     @Override
     public User getById(Long id) {
+
         return userRepository.findById(id).orElse(null);
     }
 
     @Override
     public User getByUsername(String username) {
+
         return userRepository.findByUsername(username).orElse(null);
     }
 

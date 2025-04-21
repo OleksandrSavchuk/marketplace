@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CartService {
 
-    Cart getById(Long id);
-
     List<Cart> getAll();
+
+    Cart getById(Long id);
 
     Cart create(Cart cart);
 

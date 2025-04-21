@@ -15,27 +15,32 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Category getById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
-    }
+    public List<Category> getAll() {
 
-    @Override
-    public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
     @Override
+    public Category getById(Long id) {
+
+        return categoryRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public Category create(Category category) {
+
         return categoryRepository.save(category);
     }
 
     @Override
     public Category update(Category category) {
+
         return categoryRepository.save(category);
     }
 
     @Override
     public void delete(Long id) {
+
         categoryRepository.deleteById(id);
     }
 
