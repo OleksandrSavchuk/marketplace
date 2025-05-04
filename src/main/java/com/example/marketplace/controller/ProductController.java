@@ -1,9 +1,6 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.dto.ProductDto;
-import com.example.marketplace.entity.Product;
-import com.example.marketplace.mapper.ProductMapper;
-import com.example.marketplace.service.CategoryService;
 import com.example.marketplace.service.ProductService;
 import com.example.marketplace.validation.OnCreate;
 import com.example.marketplace.validation.OnUpdate;

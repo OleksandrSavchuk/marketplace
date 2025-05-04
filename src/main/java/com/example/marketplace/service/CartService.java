@@ -1,18 +1,20 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.dto.CartItemDto;
 import com.example.marketplace.entity.Cart;
 import com.example.marketplace.entity.CartItem;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface CartService {
 
-    List<CartItem> getCartItemsByCartId(Long cartId);
+    List<CartItemDto> getCartItemsByCartId(Principal principal);
 
-    CartItem addProductToCart(Long cartId, Long productId, int quantity);
+    CartItemDto addProductToCart(CartItemDto cartItemDto, Principal principal);
 
     CartItem updateCartItem(CartItem cartItem);
 
-    void deleteCartItem(Long id);
+    void deleteCartItem(Long id, Principal principal);
 
 }

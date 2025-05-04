@@ -12,10 +12,6 @@ public class CartItemDto {
             groups = OnUpdate.class)
     private Long id;
 
-    @NotNull(message = "Cart must be not null.",
-            groups = {OnCreate.class, OnUpdate.class})
-    private Long cartId;
-
     @NotNull(message = "Product must be not null.",
             groups = {OnCreate.class, OnUpdate.class})
     private Long productId;

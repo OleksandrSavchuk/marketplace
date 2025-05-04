@@ -52,11 +52,13 @@ public class UserServiceImpl implements UserService {
         user.setRole(Role.ROLE_USER);
         user.setCreatedAt(LocalDateTime.now());
 
+        User savedUser = userRepository.save(user);
+
         Cart cart = new Cart();
         cart.setUser(user);
         cartRepository.save(cart);
 
-        return userRepository.save(user);
+        return savedUser;
     }
 
 
