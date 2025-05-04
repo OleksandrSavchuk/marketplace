@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,39 +22,29 @@ public class ProductController {
 
     private final ProductService productService;
 
-    private final ProductMapper productMapper;
-
-    private final CategoryService categoryService;
-
     @GetMapping
     public List<ProductDto> getAll() {
-        List<Product> products = productService.getAll();
-        return productMapper.toDto(products);
+        return productService.getAll();
     }
 
     @GetMapping("/{id}")
     public ProductDto getById(@PathVariable Long id) {
-        Product product = productService.getById(id);
-        return productMapper.toDto(product);
+        return productService.getById(id);
     }
 
     @PostMapping
-    public ProductDto create(@Validated(OnCreate.class) @RequestBody ProductDto productDto) {
-        Product product = productMapper.toEntity(productDto, categoryService);
-        Product savedProduct = productService.create(product);
-        return productMapper.toDto(savedProduct);
+    public ProductDto create(@Validated(OnCreate.class) @RequestBody ProductDto productDto, Principal principal) {
+        return productService.create(productDto, principal);
     }
 
     @PutMapping
-    public ProductDto update(@Validated(OnUpdate.class) @RequestBody ProductDto productDto) {
-        Product product = productMapper.toEntity(productDto);
-        Product updatedProduct = productService.update(product);
-        return productMapper.toDto(updatedProduct);
+    public ProductDto update(@Validated(OnUpdate.class) @RequestBody ProductDto productDto, Principal principal) {
+        return productService.update(productDto, principal);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        productService.delete(id);
+    public void delete(@PathVariable Long id, Principal principal) {
+        productService.delete(id, principal);
     }
 
 }
