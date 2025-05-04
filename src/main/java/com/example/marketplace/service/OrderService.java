@@ -10,7 +10,7 @@ public interface OrderService {
 
     Order getById(Long id);
 
-    Order create(Order product);
+    Order createFromCart(String username);
 
     Order update(Order product);
 

@@ -72,8 +72,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(configurer ->
                         configurer
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/api/v1/").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);

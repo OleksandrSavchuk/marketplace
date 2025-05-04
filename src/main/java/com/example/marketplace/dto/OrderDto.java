@@ -18,7 +18,7 @@ public class OrderDto {
     @NotNull(message = "Total price must be not null.")
     private double totalPrice;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @NotNull(message = "Items must be not null.")
     private List<OrderItemDto> items;
 
     @NotNull(message = "Status must be not null.")

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class CategoryController {
 
     @GetMapping
     public List<CategoryDto> getAll() {
-        List<Category> categories = categoryService.getAllCategories();
+        List<Category> categories = categoryService.getAll();
         return categoryMapper.toDto(categories);
     }
 

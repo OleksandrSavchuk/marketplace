@@ -23,10 +23,10 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    private double price;
+    private Double price;
 
     @Column(name = "inventory_count", nullable = false)
-    private int inventoryCount;
+    private Integer inventoryCount;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

@@ -4,12 +4,12 @@ import com.example.marketplace.dto.OrderDto;
 import com.example.marketplace.entity.Order;
 import com.example.marketplace.mapper.OrderMapper;
 import com.example.marketplace.service.OrderService;
-import com.example.marketplace.validation.OnCreate;
 import com.example.marketplace.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -35,9 +35,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderDto create(@Validated(OnCreate.class) @RequestBody OrderDto orderDto) {
-        Order order = orderMapper.toEntity(orderDto);
-        Order savedOrder = orderService.create(order);
+    public OrderDto createFromCart(Principal principal) {
+        Order savedOrder = orderService.createFromCart(principal.getName());
         return orderMapper.toDto(savedOrder);
     }
 

@@ -3,6 +3,7 @@ package com.example.marketplace.controller;
 import com.example.marketplace.dto.ProductDto;
 import com.example.marketplace.entity.Product;
 import com.example.marketplace.mapper.ProductMapper;
+import com.example.marketplace.service.CategoryService;
 import com.example.marketplace.service.ProductService;
 import com.example.marketplace.validation.OnCreate;
 import com.example.marketplace.validation.OnUpdate;
@@ -22,6 +23,8 @@ public class ProductController {
 
     private final ProductMapper productMapper;
 
+    private final CategoryService categoryService;
+
     @GetMapping
     public List<ProductDto> getAll() {
         List<Product> products = productService.getAll();
@@ -36,7 +39,7 @@ public class ProductController {
 
     @PostMapping
     public ProductDto create(@Validated(OnCreate.class) @RequestBody ProductDto productDto) {
-        Product product = productMapper.toEntity(productDto);
+        Product product = productMapper.toEntity(productDto, categoryService);
         Product savedProduct = productService.create(product);
         return productMapper.toDto(savedProduct);
     }
