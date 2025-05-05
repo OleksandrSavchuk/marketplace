@@ -45,4 +45,10 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
+    @OneToMany(mappedBy = "buyer")
+    private List<Order> ordersAsBuyer;
+
+    @OneToMany(mappedBy = "seller")
+    private List<Order> ordersAsSeller;
+
 }

@@ -1,9 +1,7 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.dto.OrderDto;
-import com.example.marketplace.entity.Order;
 import com.example.marketplace.service.OrderService;
-import com.example.marketplace.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +18,13 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public List<OrderDto> getAll() {
-        return orderService.getAll();
+    public List<OrderDto> getAll(Principal principal) {
+        return orderService.getAll(principal);
     }
 
     @GetMapping("/{id}")
-    public OrderDto getById(@PathVariable Long id) {
-        return orderService.getById(id);
+    public OrderDto getById(@PathVariable Long id, Principal principal) {
+        return orderService.getById(id, principal);
     }
 
     @PostMapping

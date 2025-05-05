@@ -22,4 +22,8 @@ public class OrderDto {
     @NotNull(message = "Status must be not null.")
     private OrderStatus status;
 
+    private Long buyerId;
+
+    private Long sellerId;
+
 }

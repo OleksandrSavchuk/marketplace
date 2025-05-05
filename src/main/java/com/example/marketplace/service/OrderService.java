@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface OrderService {
 
-    List<OrderDto> getAll();
+    List<OrderDto> getAll(Principal principal);
 
-    OrderDto getById(Long id);
+    OrderDto getById(Long id, Principal principal);
 
     OrderDto createFromCart(Principal principal);
 

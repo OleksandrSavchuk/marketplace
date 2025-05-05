@@ -3,11 +3,14 @@ package com.example.marketplace.service.impl;
 import com.example.marketplace.dto.OrderDto;
 import com.example.marketplace.entity.*;
 import com.example.marketplace.entity.enums.OrderStatus;
+import com.example.marketplace.entity.enums.Role;
 import com.example.marketplace.exception.ResourceNotFoundException;
 import com.example.marketplace.mapper.OrderMapper;
 import com.example.marketplace.repository.*;
 import com.example.marketplace.service.OrderService;
+import com.example.marketplace.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +28,34 @@ public class OrderServiceImpl implements OrderService {
     private final CartRepository cartRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
+    private final UserService userService;
 
     @Override
-    public List<OrderDto> getAll() {
-        List<Order> orders = orderRepository.findAll();
+    public List<OrderDto> getAll(Principal principal) {
+        User user = userService.getByUsername(principal.getName());
+        List<Order> orders = switch (user.getRole()) {
+            case ROLE_USER -> orderRepository.findByBuyer(user);
+            case ROLE_SELLER -> orderRepository.findBySeller(user);
+            case ROLE_ADMIN -> orderRepository.findAll();
+        };
         return orderMapper.toDto(orders);
     }
 
     @Override
-    public OrderDto getById(Long id) {
-        Order order = orderRepository.findById(id).orElse(null);
+    public OrderDto getById(Long id, Principal principal) {
+        User user = userService.getByUsername(principal.getName());
+        Order order = orderRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+
+        boolean isBuyer = order.getBuyer().getId().equals(user.getId());
+        boolean isSeller = order.getSeller().getId().equals(user.getId());
+
+        if (user.getRole() == Role.ROLE_USER && !isBuyer) {
+            throw new AccessDeniedException("You can only view your own orders.");
+        }
+        if (user.getRole() == Role.ROLE_SELLER && !isSeller) {
+            throw new AccessDeniedException("You can only view your own orders.");
+        }
+
         return orderMapper.toDto(order);
     }
 
