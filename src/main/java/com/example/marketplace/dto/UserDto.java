@@ -25,6 +25,10 @@ public class UserDto {
             groups = {OnCreate.class, OnUpdate.class})
     private String username;
 
+    @NotNull(message = "Role must be not null.",
+            groups = OnCreate.class)
+    private String role;
+
     @NotNull(message = "Password must be not null.",
             groups = {OnCreate.class, OnUpdate.class})
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

@@ -1,14 +1,17 @@
 package com.example.marketplace.service.impl;
 
+import com.example.marketplace.dto.OrderDto;
 import com.example.marketplace.entity.*;
 import com.example.marketplace.entity.enums.OrderStatus;
 import com.example.marketplace.exception.ResourceNotFoundException;
+import com.example.marketplace.mapper.OrderMapper;
 import com.example.marketplace.repository.*;
 import com.example.marketplace.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,22 +24,24 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderMapper orderMapper;
 
     @Override
-    public List<Order> getAll() {
-        return orderRepository.findAll();
+    public List<OrderDto> getAll() {
+        List<Order> orders = orderRepository.findAll();
+        return orderMapper.toDto(orders);
     }
 
     @Override
-    public Order getById(Long id) {
-        return orderRepository.findById(id).orElse(null);
+    public OrderDto getById(Long id) {
+        Order order = orderRepository.findById(id).orElse(null);
+        return orderMapper.toDto(order);
     }
 
     @Transactional
     @Override
-    public Order createFromCart(String username) {
-
-        User user = userRepository.findByUsername(username)
+    public OrderDto createFromCart(Principal principal) {
+        User user = userRepository.findByUsername(principal.getName())
                 .orElseThrow(ResourceNotFoundException::new);
 
         Cart cart = cartRepository.findByUserId(user.getId());
@@ -81,16 +86,11 @@ public class OrderServiceImpl implements OrderService {
         cart.getItems().clear();
         cartRepository.save(cart);
 
-        return orderRepository.save(order);
+        return orderMapper.toDto(order);
     }
 
     @Override
-    public Order update(Order product) {
-        return orderRepository.save(product);
-    }
-
-    @Override
-    public void delete(Long id) {
+    public void delete(Long id, Principal principal) {
         orderRepository.deleteById(id);
     }
 }

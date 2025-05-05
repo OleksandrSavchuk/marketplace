@@ -2,8 +2,6 @@ package com.example.marketplace.dto;
 
 import com.example.marketplace.entity.enums.OrderStatus;
 import com.example.marketplace.validation.OnUpdate;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

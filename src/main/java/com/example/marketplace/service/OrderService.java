@@ -1,19 +1,18 @@
 package com.example.marketplace.service;
 
-import com.example.marketplace.entity.Order;
+import com.example.marketplace.dto.OrderDto;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface OrderService {
 
-    List<Order> getAll();
+    List<OrderDto> getAll();
 
-    Order getById(Long id);
+    OrderDto getById(Long id);
 
-    Order createFromCart(String username);
+    OrderDto createFromCart(Principal principal);
 
-    Order update(Order product);
-
-    void delete(Long id);
+    void delete(Long id, Principal principal);
 
 }

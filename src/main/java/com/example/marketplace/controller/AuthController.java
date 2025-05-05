@@ -33,24 +33,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public UserDto register(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        User createdUser = userService.createUser(user);
-        return userMapper.toDto(createdUser);
-    }
-
-    @PostMapping("/register-seller")
-    public UserDto registerSeller(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        User createdUser = userService.createSeller(user);
-        return userMapper.toDto(createdUser);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/register-admin")
-    public UserDto registerAdmin(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        User createdUser = userService.createAdmin(user);
-        return userMapper.toDto(createdUser);
+        return userService.registerUser(userDto);
     }
 
     @PostMapping("/refresh")

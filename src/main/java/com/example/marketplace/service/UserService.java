@@ -1,5 +1,6 @@
 package com.example.marketplace.service;
 
+import com.example.marketplace.dto.UserDto;
 import com.example.marketplace.entity.User;
 
 import java.util.List;
@@ -12,11 +13,7 @@ public interface UserService {
 
     User getByUsername(String username);
 
-    User createUser(User user);
-
-    User createAdmin(User user);
-
-    User createSeller(User user);
+    UserDto registerUser(UserDto userDto);
 
     User update(User user);
 

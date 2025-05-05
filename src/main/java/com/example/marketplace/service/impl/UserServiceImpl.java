@@ -1,8 +1,10 @@
 package com.example.marketplace.service.impl;
 
+import com.example.marketplace.dto.UserDto;
 import com.example.marketplace.entity.Cart;
 import com.example.marketplace.entity.User;
 import com.example.marketplace.entity.enums.Role;
+import com.example.marketplace.mapper.UserMapper;
 import com.example.marketplace.repository.CartRepository;
 import com.example.marketplace.repository.UserRepository;
 import com.example.marketplace.service.UserService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final CartRepository cartRepository;
+
+    private final UserMapper userMapper;
 
     @Override
     public List<User> getAll() {
@@ -41,7 +46,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
+    public UserDto registerUser(UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        if (!Set.of("USER", "SELLER").contains(userDto.getRole().toUpperCase())) {
+            throw new IllegalStateException("Role not allowed.");
+        }
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalStateException("Username already exists.");
         }
@@ -49,45 +58,19 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Passwords do not match.");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.ROLE_USER);
+        Role role = Role.valueOf("ROLE_" + userDto.getRole().toUpperCase());
+        user.setRole(role);
         user.setCreatedAt(LocalDateTime.now());
 
         User savedUser = userRepository.save(user);
 
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cartRepository.save(cart);
-
-        return savedUser;
-    }
-
-
-    @Override
-    public User createSeller(User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalStateException("Username already exists.");
+        if (role == Role.ROLE_USER) {
+            Cart cart = new Cart();
+            cart.setUser(user);
+            cartRepository.save(cart);
         }
-        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
-            throw new IllegalStateException("Passwords do not match.");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.ROLE_SELLER);
-        user.setCreatedAt(LocalDateTime.now());
-        return userRepository.save(user);
-    }
 
-    @Override
-    public User createAdmin(User user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalStateException("Username already exists.");
-        }
-        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
-            throw new IllegalStateException("Passwords do not match.");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.ROLE_ADMIN);
-        user.setCreatedAt(LocalDateTime.now());
-        return userRepository.save(user);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
