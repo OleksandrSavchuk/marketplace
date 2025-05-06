@@ -3,10 +3,12 @@ package com.example.marketplace.service.impl;
 import com.example.marketplace.dto.UserDto;
 import com.example.marketplace.entity.Cart;
 import com.example.marketplace.entity.User;
+import com.example.marketplace.entity.enums.MailType;
 import com.example.marketplace.entity.enums.Role;
 import com.example.marketplace.mapper.UserMapper;
 import com.example.marketplace.repository.CartRepository;
 import com.example.marketplace.repository.UserRepository;
+import com.example.marketplace.service.MailService;
 import com.example.marketplace.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 @Service
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private final CartRepository cartRepository;
 
     private final UserMapper userMapper;
+
+    private final MailService mailService;
 
     @Override
     public List<User> getAll() {
@@ -58,11 +63,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("Passwords do not match.");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = Role.valueOf("ROLE_" + userDto.getRole().toUpperCase());
+        String userRole = "ROLE_" + userDto.getRole().toUpperCase();
+        Role role = Role.valueOf(userRole);
         user.setRole(role);
         user.setCreatedAt(LocalDateTime.now());
 
         User savedUser = userRepository.save(user);
+
+        mailService.sendMail(user, MailType.REGISTRATION, new Properties());
 
         if (role == Role.ROLE_USER) {
             Cart cart = new Cart();

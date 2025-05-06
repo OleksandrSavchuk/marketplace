@@ -3,6 +3,7 @@ package com.example.marketplace.controller;
 import com.example.marketplace.dto.OrderDto;
 import com.example.marketplace.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +28,13 @@ public class OrderController {
         return orderService.getById(id, principal);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public OrderDto createFromCart(Principal principal) {
         return orderService.createFromCart(principal);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id, Principal principal) {
         orderService.delete(id, principal);

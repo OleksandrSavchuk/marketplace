@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:postgresql://localhost:5437/marketplace
     username: postgres
@@ -11,8 +13,24 @@ spring:
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    port: ${SPRING_MAIL_PORT}
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    properties:
+      mail:
+        debug: false
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 security:
   jwt:
     secret: ampmZG5namZkYmppbmdudWkzNHVpbmYgcmpISkJJTklVSkJIRmJkc25pamRic2hqZHNuVXU4NzQzZzhoNDNoZmh1
     access: 3600000
     refresh: 2592000000
+

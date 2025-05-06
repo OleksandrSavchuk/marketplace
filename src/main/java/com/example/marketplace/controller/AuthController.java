@@ -1,7 +1,6 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.dto.UserDto;
-import com.example.marketplace.entity.User;
 import com.example.marketplace.jwt.JwtRequest;
 import com.example.marketplace.jwt.JwtResponse;
 import com.example.marketplace.mapper.UserMapper;
@@ -9,7 +8,6 @@ import com.example.marketplace.service.AuthService;
 import com.example.marketplace.service.UserService;
 import com.example.marketplace.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +22,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @PostMapping("/login")
     public JwtResponse login(@Validated @RequestBody JwtRequest loginRequest) {

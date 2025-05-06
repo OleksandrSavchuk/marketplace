@@ -20,7 +20,6 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
-
     private final CategoryMapper categoryMapper;
 
     @GetMapping
@@ -35,6 +34,7 @@ public class CategoryController {
         return categoryMapper.toDto(category);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public CategoryDto update(@Validated(OnUpdate.class) @RequestBody CategoryDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
@@ -42,6 +42,7 @@ public class CategoryController {
         return categoryMapper.toDto(updatedCategory);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public CategoryDto create(@Validated(OnCreate.class) @RequestBody CategoryDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
@@ -49,6 +50,7 @@ public class CategoryController {
         return categoryMapper.toDto(createdCategory);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         categoryService.delete(id);

@@ -4,12 +4,14 @@ import com.example.marketplace.dto.CartItemDto;
 import com.example.marketplace.service.CartService;
 import com.example.marketplace.validation.OnCreate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
+@PreAuthorize("hasRole('USER')")
 @RestController
 @RequestMapping("/api/v1/carts")
 @RequiredArgsConstructor

@@ -18,15 +18,16 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
     private final UserMapper userMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<UserDto> getAll() {
         List<User> users = userService.getAll();
         return userMapper.toDto(users);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
         User user = userService.getById(id);
