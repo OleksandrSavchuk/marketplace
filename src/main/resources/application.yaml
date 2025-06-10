@@ -33,4 +33,5 @@ security:
     secret: ampmZG5namZkYmppbmdudWkzNHVpbmYgcmpISkJJTklVSkJIRmJkc25pamRic2hqZHNuVXU4NzQzZzhoNDNoZmh1
     access: 3600000
     refresh: 2592000000
-
+springdoc:
+  override-with-generic-response: false
