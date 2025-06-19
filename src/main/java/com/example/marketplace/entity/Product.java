@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -38,5 +39,10 @@ public class Product {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "image")
+    @CollectionTable(name = "products_images")
+    @ElementCollection
+    private List<String> images;
 
 }

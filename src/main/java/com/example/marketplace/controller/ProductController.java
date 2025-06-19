@@ -1,6 +1,7 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.dto.ProductDto;
+import com.example.marketplace.dto.ProductImageDto;
 import com.example.marketplace.service.ProductService;
 import com.example.marketplace.validation.OnCreate;
 import com.example.marketplace.validation.OnUpdate;
@@ -58,4 +59,10 @@ public class ProductController {
         productService.delete(id, principal);
     }
 
+    @PreAuthorize("hasRole('SELLER')")
+    @PostMapping("/{id}/image")
+    @Operation(summary = "Load image for product")
+    public void loadImage(@PathVariable Long id, @Validated @ModelAttribute ProductImageDto productImageDto) {
+        productService.uploadImage(id, productImageDto);
+    }
 }

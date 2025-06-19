@@ -1,13 +1,17 @@
 package com.example.marketplace.service.impl;
 
 import com.example.marketplace.dto.ProductDto;
+import com.example.marketplace.dto.ProductImageDto;
 import com.example.marketplace.entity.Category;
 import com.example.marketplace.entity.Product;
+import com.example.marketplace.entity.ProductImage;
 import com.example.marketplace.entity.User;
 import com.example.marketplace.exception.AccessDeniedException;
+import com.example.marketplace.mapper.ProductImageMapper;
 import com.example.marketplace.mapper.ProductMapper;
 import com.example.marketplace.repository.ProductRepository;
 import com.example.marketplace.service.CategoryService;
+import com.example.marketplace.service.ImageService;
 import com.example.marketplace.service.ProductService;
 import com.example.marketplace.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +31,11 @@ public class ProductServiceImpl implements ProductService {
 
     private final UserService userService;
 
+    private final ImageService imageService;
+
     private final ProductMapper productMapper;
+
+    private final ProductImageMapper productImageMapper;
 
 
     @Override
@@ -86,6 +94,15 @@ public class ProductServiceImpl implements ProductService {
             throw new AccessDeniedException();
         }
         return product;
+    }
+
+    @Override
+    public void uploadImage(Long id, ProductImageDto productImageDto) {
+        Product product = productRepository.findById(id).orElseThrow(RuntimeException::new);
+        ProductImage image = productImageMapper.toEntity(productImageDto);
+        String fileName = imageService.upload(image);
+        product.getImages().add(fileName);
+        productRepository.save(product);
     }
 
 }
