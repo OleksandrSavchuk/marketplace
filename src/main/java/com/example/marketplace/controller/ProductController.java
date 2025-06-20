@@ -65,4 +65,5 @@ public class ProductController {
     public void loadImage(@PathVariable Long id, @Validated @ModelAttribute ProductImageDto productImageDto) {
         productService.uploadImage(id, productImageDto);
     }
+
 }

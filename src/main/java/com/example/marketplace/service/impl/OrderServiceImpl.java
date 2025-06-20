@@ -111,6 +111,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderDto updateStatus(Long id, OrderStatus status, Principal principal) {
+        User seller = userService.getByUsername(principal.getName());
+        Order order = orderRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        if (!order.getSeller().getId().equals(seller.getId())) {
+            throw new AccessDeniedException("You can only update your own orders.");
+        }
+        order.setStatus(status);
+        orderRepository.save(order);
+        return orderMapper.toDto(order);
+    }
+
+    @Override
     public void delete(Long id, Principal principal) {
         orderRepository.deleteById(id);
     }

@@ -1,6 +1,7 @@
 package com.example.marketplace.controller;
 
 import com.example.marketplace.dto.OrderDto;
+import com.example.marketplace.entity.enums.OrderStatus;
 import com.example.marketplace.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,6 +42,13 @@ public class OrderController {
     @Operation(summary = "Create order from cart")
     public OrderDto createFromCart(Principal principal) {
         return orderService.createFromCart(principal);
+    }
+
+    @PreAuthorize("hasRole('SELLER')")
+    @PostMapping("/{id}/status")
+    @Operation(summary = "Update order status")
+    public OrderDto updateOrderStatus(@PathVariable Long id, @RequestBody OrderStatus status, Principal principal) {
+       return orderService.updateStatus(id, status, principal);
     }
 
     @PreAuthorize("hasRole('USER')")
